@@ -36,19 +36,26 @@ public class UtilisateurController {
     }
 
     @PostMapping("/ajouter")
-    public void add(){
-        // ajouter un utilisateur en base de données
+    public Utilisateur creaUtilisateur(@RequestBody Utilisateur utilisateur) {
+        return utilisateurRepository.save(utilisateur);
     }
 
-    @PutMapping("/modifier")
-    public void update(){
-        // modifier un utilisateur en base de données
+    @PutMapping("/{id}")
+    public Utilisateur updateUtilisateur(@PathVariable Long id, @RequestBody Utilisateur updatedUser) {
+        return utilisateurRepository.findById(id).map(utilisateur -> {
+            utilisateur.setNom(updatedUser.getNom());
+            utilisateur.setPrenom(updatedUser.getPrenom());
+            utilisateur.setMatricule(updatedUser.getMatricule());
+            return utilisateurRepository.save(utilisateur);
+
+        }).orElseThrow(() ->new RuntimeException("utilisateur non trouvé"));
     }
 
-    @DeleteMapping("/supprimer")
-    public void delete(){
-        // supprime un utilisateur en base de données
+    @DeleteMapping("/{id}")
+    public void deleteUtilisateur(@PathVariable Long id){
+        utilisateurRepository.deleteById(id);
     }
+
 
     @PutMapping("/supprimer")
     public void updateStatut(){
