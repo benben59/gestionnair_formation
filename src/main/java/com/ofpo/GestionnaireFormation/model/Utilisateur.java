@@ -1,6 +1,9 @@
 package com.ofpo.GestionnaireFormation.model;
 
 import jakarta.persistence.*;
+// import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "utilisateur")
@@ -19,10 +22,40 @@ public class Utilisateur {
     private String motDePasse;
     private Boolean statut;
 
-    public Long getId() {
-        return id;
+    @ManyToMany
+    @JoinTable(name = "utilisateur_role", // Nom de la table de jointure
+            joinColumns = @JoinColumn(name = "id_utilisateur"), // Clé étrangère pointant vers l'utilisateur
+            inverseJoinColumns = @JoinColumn(name = "id_role") // Clé étrangère pointant vers le rôle
+    )
+    private List<Role> role = new ArrayList<>(); // Ensemble des rôles attribués à un utilisateur
+
+    //conroler vide pour jackson
+    public Utilisateur () {
     }
 
+    // constructeur plein 
+    public Utilisateur(Long id, String matricule, String avatar, String nom, String prenom, String adresseMail,
+        String adressePostal, String codePostal, String ville, String motDePasse, Boolean statut, List<Role> role) {
+        this.id = id;
+        this.matricule = matricule;
+        this.avatar = avatar;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.adresseMail = adresseMail;
+        this.adressePostal = adressePostal;
+        this.codePostal = codePostal;
+        this.ville = ville;
+        this.motDePasse = motDePasse;
+        this.statut = statut;
+        this.role = role;
+                        }
+
+
+
+    // getter et setter 
+    public Long getId(){
+        return id;
+    }
     public void setId(Long id) {
         this.id = id;
     }
@@ -105,5 +138,12 @@ public class Utilisateur {
 
     public void setStatut(Boolean statut) {
         this.statut = statut;
+    }
+
+    public List<Role> getRole() {
+        return role;
+    }
+    public void setRole(List<Role> role) {
+        this.role = role;
     }
 }
