@@ -29,7 +29,7 @@ public class Utilisateur {
     )
     private List<Role> role = new ArrayList<>(); // Ensemble des rôles attribués à un utilisateur
 
-    //conroler vide pour jackson
+    //controler vide pour jackson
     public Utilisateur () {
     }
 
