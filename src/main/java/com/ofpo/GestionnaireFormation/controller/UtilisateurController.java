@@ -1,8 +1,10 @@
 package com.ofpo.GestionnaireFormation.controller;
 
+import com.ofpo.GestionnaireFormation.DTO.RoleDTO;
 import com.ofpo.GestionnaireFormation.model.Utilisateur;
 import com.ofpo.GestionnaireFormation.repository.UtilisateurRepository;
 import org.springframework.web.bind.annotation.*;
+import com.ofpo.GestionnaireFormation.DTO.UtilisateurDTO;
 
 import java.util.List;
 
@@ -23,10 +25,25 @@ public class UtilisateurController {
     }
 
     @GetMapping("/")
-    public List<Utilisateur> findAll() {
-        // retourner la liste complète des utilisateurs
-        // j'utilise le repo utilisateur pour faire un findAll et retourner les resultats
-        return this.utilisateurRepository.findAll();
+    public List<UtilisateurDTO> findAll() {
+        // retourner la liste complète des utilisateurs (avec DTO)
+        List<Utilisateur> utilisateurs = this.utilisateurRepository.findAll();
+        // Utilisation du DTO
+        return utilisateurs.stream().map(utilisateur -> {
+            //UTILISATEUR
+            UtilisateurDTO dto = new UtilisateurDTO();
+            dto.setMatricule(utilisateur. getMatricule());
+            dto.setNom(utilisateur.getNom());
+            dto.setPrenom(utilisateur.getPrenom());
+            dto.setAdresseMail(utilisateur.getAdresseMail());
+            //ROLES
+            List<RoleDTO> roleDtos = utilisateur.getRole().stream()
+                    .map(role -> new RoleDTO(role.getLibelle()))
+                    .toList();
+
+            dto.setRole(roleDtos);
+            return dto;
+        }).toList();
     }
 
     @GetMapping("/{matricule}")
@@ -57,7 +74,7 @@ public class UtilisateurController {
     }
 
 
-    @PutMapping("/supprimer")
+    @PutMapping("/sup-primer")
     public void updateStatut(){
         // desactive un utilisateur en base de données
     }
