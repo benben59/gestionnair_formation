@@ -26,6 +26,10 @@ public class FormationDTO {
         this.date_fin_pe = date_fin_pe;
     }
 
+    public FormationDTO(){
+
+    }
+
     public String getLibelle() {
         return libelle;
     }
